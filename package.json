@@ -1,0 +1,14 @@
+{
+  "name": "tradeguide",
+  "version": "1.0.0",
+  "description": "A listing directory which can be used by common people to search for the goods & services in the area selected. Location will be on map.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
