@@ -24,7 +24,7 @@ app.set('views', path.join(__dirname,'views'));
 
 // ENDPOINTS
 app.get('/', (req,res)=>{
-    res.status(200).render('index.pug', {title:website_name,data:null});
+    res.status(200).render('index.pug', {title:website_name});
 });
 
 app.listen(port,()=>{
