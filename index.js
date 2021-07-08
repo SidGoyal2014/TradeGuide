@@ -27,6 +27,10 @@ app.get('/', (req,res)=>{
     res.status(200).render('index.pug', {title:website_name});
 });
 
+app.get('/', (req,res)=>{
+    res.status(200).render('register.pug', {title:website_name});
+})
+
 app.listen(port,()=>{
     console.log("The server is running at port : ", port);
 });
