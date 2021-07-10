@@ -18,6 +18,9 @@ const website_name = config.name;
 // Initializing the app
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({extended : false}));
+
 var con = mysql.createConnection({
     host : "localhost",
     user : "root",
@@ -25,7 +28,7 @@ var con = mysql.createConnection({
     database : "tradeguide"
 });
 
-con.connect((err)=>{
+con.connect(async(err)=>{
     if(err){
         throw err;
     }
@@ -51,7 +54,11 @@ app.get('/register', (req,res)=>{
     res.status(200).render('register.pug', {title:website_name});
 })
 
-app.post('/register_auth', (req,res,next)=>{
+app.get("/register_auth", (req,res)=>{
+    res.status(200).render('register.pug', {title:website_name});
+})
+
+app.post('/register_auth', async(req,res)=>{
 
     console.log("hey there!!");
 
@@ -64,8 +71,8 @@ app.post('/register_auth', (req,res,next)=>{
         email: req.body.email,
         pass: req.body.password,
         re_pass: req.body.re_password,
-        country: req.body.country_form,
-        state: req.body.state_form,
+        country: req.body.country,
+        state: req.body.state,
         address: req.body.address,
         category: req.body.category,
         ph_number: req.body.ph_number,
@@ -77,54 +84,37 @@ app.post('/register_auth', (req,res,next)=>{
         // go back
     }
 
-    con.sql = "SELECT * from trader WHERE email = req.body.email";
-    con.query(sql, (err, result)=>{
-        if(result.length <= 0){
-            // error
-        }
-    })
-
     // check unique email address
+    var sql = "SELECT * from trader WHERE email = " + inputdata.email;
+    con.query(sql, async(err, result)=>{
+        console.log(result);
+        if(result == null || result.length <= 0){
+            console.log("It's unique");
 
-    var flag = false;
-
-    con.connect((err)=>{
-        if(err){
-            throw err;
-        }
-        con.query("SELECT * FROM trader", (err, result, fields)=>{
-            if(err){
-                throw err;
-            }
-            for(var i=0;i<result.length;i++){
-                if(result[i].email == inputdata.email){
-                    flag = true;
-                    break;
-                }
-            }
-
-            if(flag == true){
-                // go back with error
-            }
-            else{
-                for(var i=0;i<result.length;i++){
-                    if(result[i].uname == inputdata.uname){
-                        flag = true;
-                        break;
-                    }
-                }
-
-                if(flag == true){
-                    // go back with error
-                }
-                else{
-                    con.sql = "INSERT INTO trader(uname, name, email, password, address, state, country, category, ph_number, website, desciption) VALUES (" + inputdata.uname + "," + inputdata.name + "," + inputdata.email + "," + inputdata.password + "," + inputdata.address + "," + inputdata.state + "," + inputdata.country + "," + inputdata.category + "," + inputdata.ph_number + "," + inputdata.website + "," + inputdata.description;
-                    con.query(sql, (err,result)=>{
-                        console.log("The data entered");
+            // check unique username
+            sql = "SELECT * FROM trader WHERE uname = " + inputdata.uname;
+            con.query(sql, async(err, result)=>{
+                if(result == null || result.length <= 0){
+                    var sql = "INSERT INTO trader(uname, name, email, password, address, state, country, category, ph_number, website, description) VALUES (" + "'" + inputdata.uname + "'" + "," + "'" + inputdata.name + "'" + "," + "'" + inputdata.email + "'" + "," + "'" + inputdata.pass + "'" + "," + "'" + inputdata.address + "'" + "," + "'" + inputdata.state + "'" + "," + "'" + inputdata.country + "'" + "," + "'" + inputdata.category + "'" + "," + "'" + inputdata.ph_number + "'" + "," + "'" + inputdata.website + "'" + "," + "'" + inputdata.description + "'" + ")";
+                    console.log(sql);
+                    con.query(sql, async(err,result)=>{
+                        if(err){
+                            throw err;
+                        }
+                        else{
+                            console.log("The data entered");
+                            return res.redirect('/');
+                        }
                     });
                 }
-            }
-        });
+                else{
+                    // go back
+                }
+            });
+        }
+        else{
+            // go back
+        }
     });
 });
 
