@@ -34,7 +34,7 @@ con.connect(async(err)=>{
     }
     console.log("MySQL connected");
     con.query("SELECT * FROM trader", (err, result, fields)=>{
-        console.log(result);
+        // console.log(result);
     });
 });
 
@@ -53,6 +53,61 @@ app.get('/', (req,res)=>{
 app.get('/register', (req,res)=>{
     res.status(200).render('register.pug', {title:website_name});
 })
+
+app.post("/display_locations", (req,res)=>{
+
+    inputdata = {
+        country : req.body.country,
+        state : req.body.state,
+        city : req.body.city,
+        category : req.body.category,
+        search : req.body.search
+    }
+
+    console.log(inputdata);
+    // console.log(req.body.country);
+    // console.log(req.body.state);
+    // console.log(req.body.city);
+    // console.log(req.body.category);
+    // console.log(req.body.search);
+
+    var sql = "SELECT * from trader WHERE (country = " + "'" + inputdata.country + "'" + " AND state = " + "'" + inputdata.state + "'" + " AND city = " + "'" + inputdata.city + "'" + " AND category = " + "'" + inputdata.category + "'" + ")"; 
+    con.query(sql, async(err,result)=>{
+        if(err){
+            throw err;
+        }
+        else{
+
+            if(result == null){
+                // something different
+            }
+            else{
+                // something different
+                var addresses = [];
+                var temp = "";
+
+                for(var i=0;i<result.length;i++){
+                    temp = temp + result[i].address + "," + result[i].city + "," + result[i].state + "," + result[i].pincode + "," + result[i].country;
+                    addresses.push(temp);
+                }
+
+                console.log(addresses);
+                res.status(200).render('index.pug', {title: website_name, address: addresses});
+            }
+
+            // res.status(200).render('display_locations.pug', {title: website_name, query: inputdata});
+            console.log("Result : ");
+            console.log(result);
+            console.log("/////////////");
+        }
+    })
+
+    console.log(sql);
+
+    // res.status(200).render('display_locations.pug', {title: website_name, query: inputdata});
+
+    // return res.redirect("");
+});
 
 app.get("/register_auth", (req,res)=>{
     res.status(200).render('register.pug', {title:website_name});
