@@ -72,7 +72,9 @@ app.post('/register_auth', async(req,res)=>{
         pass: req.body.password,
         re_pass: req.body.re_password,
         country: req.body.country,
+        pincode: req.body.pincode,
         state: req.body.state,
+        city: req.body.city,
         address: req.body.address,
         category: req.body.category,
         ph_number: req.body.ph_number,
@@ -95,7 +97,7 @@ app.post('/register_auth', async(req,res)=>{
             sql = "SELECT * FROM trader WHERE uname = " + inputdata.uname;
             con.query(sql, async(err, result)=>{
                 if(result == null || result.length <= 0){
-                    var sql = "INSERT INTO trader(uname, name, email, password, address, state, country, category, ph_number, website, description) VALUES (" + "'" + inputdata.uname + "'" + "," + "'" + inputdata.name + "'" + "," + "'" + inputdata.email + "'" + "," + "'" + inputdata.pass + "'" + "," + "'" + inputdata.address + "'" + "," + "'" + inputdata.state + "'" + "," + "'" + inputdata.country + "'" + "," + "'" + inputdata.category + "'" + "," + "'" + inputdata.ph_number + "'" + "," + "'" + inputdata.website + "'" + "," + "'" + inputdata.description + "'" + ")";
+                    var sql = "INSERT INTO trader(uname, name, email, password, address, city, state, pincode, country, category, ph_number, website, description) VALUES (" + "'" + inputdata.uname + "'" + "," + "'" + inputdata.name + "'" + "," + "'" + inputdata.email + "'" + "," + "'" + inputdata.pass + "'" + "," + "'" + inputdata.address + "'" + "," + "'" + inputdata.city + "'" + "," + "'" + inputdata.state + "'" + "," + "'" + inputdata.pincode + "'" + "," + "'" + inputdata.country + "'" + "," + "'" + inputdata.category + "'" + "," + "'" + inputdata.ph_number + "'" + "," + "'" + inputdata.website + "'" + "," + "'" + inputdata.description + "'" + ")";
                     console.log(sql);
                     con.query(sql, async(err,result)=>{
                         if(err){
