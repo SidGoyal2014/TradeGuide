@@ -92,7 +92,7 @@ app.post("/display_locations", (req,res)=>{
                 }
 
                 console.log(addresses);
-                res.status(200).render('index.pug', {title: website_name, address: addresses});
+                res.status(200).render('display_locations.pug', {title: website_name, address: addresses});
             }
 
             // res.status(200).render('display_locations.pug', {title: website_name, query: inputdata});
