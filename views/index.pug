@@ -97,6 +97,22 @@
         |<div class="container">
         |    <div id="mapid"></div>
         |    <script>
+        |        var curr_lat, curr_lon;
+        |        if(navigator.geolocation){
+        |           navigator.geolocation.getCurrentPosition(position=>{
+        |               curr_lat = position.coords.latitude;
+        |               curr_lon = position.coords.longitude;
+        |               console.log(curr_lat);
+        |               console.log(curr_lon);
+        |           })
+        |        }
+        |        else{
+        |           alert("Please enable your location");
+        |        }
+        |
+        |        console.log(curr_lat);
+        |        console.log(curr_lon);
+        |
         |        var mymap = L.map('mapid').setView([51.505,-0.09],13);
         |        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWRpdHlhYmFuc2FsIiwiYSI6ImNra2prNHlqajB2c3Uydms3bmlwbWVwYzUifQ.uM_5J0pJIVVzQW7ObwMGMw',{
         |            attribution:'Map data &copy;<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -114,7 +130,7 @@
         |            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
         |        });
         |        // console.log(Icon.iconUrl);
-        |        L.marker([51.5,-0.09,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
+        |        // L.marker([51.5,-0.09,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
         |    </script>
         |</div>
 

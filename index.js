@@ -89,8 +89,10 @@ app.post("/display_locations", (req,res)=>{
                 for(var i=0;i<result.length;i++){
                     temp = temp + result[i].address + "," + result[i].city + "," + result[i].state + "," + result[i].pincode + "," + result[i].country;
                     addresses.push(temp);
+                    temp = "";
                 }
 
+                // console.log("Addresses before : ");
                 console.log(addresses);
                 res.status(200).render('display_locations.pug', {title: website_name, address: addresses});
             }

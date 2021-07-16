@@ -28,7 +28,6 @@
         | <!-- Make sure you put this AFTER Leaflet's CSS -->
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 
-
         | <!-- <script src="jquery-3.5.1.min.js"></script>-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -98,6 +97,20 @@
         |<div class="container">
         |    <div id="mapid"></div>
         |    <script>
+        |        // var curr_lat, curr_lon;
+        |        // if(navigator.geolocation){
+        |        //    navigator.geolocation.getCurrentPosition(position=>{
+        |        //        curr_lat = position.coords.latitude;
+        |        //        curr_lon = position.coords.longitude;
+        |        //    })
+        |        // }
+        |        // else{
+        |        //    alert("Please enable your location");
+        |        // }
+        |
+        |        // console.log(curr_lat);
+        |        // console.log(curr_lon);
+        |
         |        var mymap = L.map('mapid').setView([51.505,-0.09],13);
         |        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWRpdHlhYmFuc2FsIiwiYSI6ImNra2prNHlqajB2c3Uydms3bmlwbWVwYzUifQ.uM_5J0pJIVVzQW7ObwMGMw',{
         |            attribution:'Map data &copy;<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -115,16 +128,27 @@
         |            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
         |        });
         |        // console.log(Icon.iconUrl);
-        |        var address = !{};
-        |        
-        |        $.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q='+address, async(data)=>{
-        |           console.log("-------------------------");
-        |           console.log(data);
-        |           console.log("-------------------------");
-        |           console.log(data[0].lat);
-        |           console.log(data[0].lon);
-        |        });
-        |        L.marker([51.5,-0.09,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
+        |        var address = !{JSON.stringify(address)};
+        |        // console.log("After Addresses");
+        |        // console.log(address);
+        |        // console.log("---- AFTER ADDRESSES ------");
+        |        // console.log(address[0]);
+        |
+        |        for(var i=0;i<address.length;i++){
+        |           // console.log("ADDRESS");
+        |           // console.log(address[i]);
+        |           // console.log("ADDRESS");
+        |           $.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q='+address[i], async(data)=>{
+        |               // console.log("-------------------------");
+        |               // console.log(data);
+        |               // console.log("-------------------------");
+        |               // console.log(data[0].lat);
+        |               // console.log(data[0].lon);
+        |               L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
+        |           });
+        |           // L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
+        |        }
+        |        // L.marker([51.5,-0.09,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
         |    </script>
         |</div>
 
