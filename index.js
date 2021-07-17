@@ -52,7 +52,37 @@ app.get('/', (req,res)=>{
 
 app.get('/register', (req,res)=>{
     res.status(200).render('register.pug', {title:website_name});
-})
+});
+
+app.get('/login', (req,res)=>{
+    res.status(200).render('trader_login.pug', {title:website_name});
+});
+
+app.post("/trader_login", (req,res)=>{
+
+    inputdata = {
+        uname : req.body.uname,
+        password : req.body.password
+    }
+
+    var sql = "SELECT * from trader WHERE (uname = " + "'" + inputdata.uname + "'" + " AND password = " + "'" + inputdata.password + "'" + ")";
+
+    console.log(sql);
+
+    con.query(sql, (err, result)=>{
+        if(err){
+            throw err;
+        }
+        else{
+            if(result == null || result.length <= 0){
+                console.log("The session is NOT set");
+            }
+            else{
+                console.log("The session is set");
+            }
+        }
+    });
+});
 
 app.post("/display_locations", (req,res)=>{
 
