@@ -87,16 +87,26 @@ app.post("/display_locations", (req,res)=>{
                 var addresses = [];
                 var temp = "";
 
+                // console.log("Result Length : ",result.length);
+
                 for(var i=0;i<result.length;i++){
                     temp = temp + result[i].address + "," + result[i].city + "," + result[i].state + "," + result[i].pincode + "," + result[i].country;
                     addresses.push(temp);
                     temp = "";
                 }
 
+                /*
+                console.log(addresses);
+                console.log("_____ RESULT__________");
+                console.log(result);
+                console.log("_______________________");
+                */
+
                 var company_data = [];
-                var temp2 = {};
+                // var temp2 = {};
 
                 for(var i=0;i<result.length;i++){
+                    var temp2 = {};
                     temp2["name"] = result[i].name;
                     temp2["email"] = result[i].email;
                     temp2["phone"] = result[i].ph_number;
@@ -106,23 +116,27 @@ app.post("/display_locations", (req,res)=>{
                     company_data.push(temp2);
                 }
 
+                /*
                 console.log("Company_Data : ");
                 console.log(company_data);
                 console.log("-----------------------");
+                */
 
                 // console.log("Addresses before : ");
-                console.log(addresses);
+                // console.log(addresses);
                 res.status(200).render('display_locations.pug', {title: website_name, address: addresses, c_data: company_data});
             }
 
             // res.status(200).render('display_locations.pug', {title: website_name, query: inputdata});
+            /*
             console.log("Result : ");
             console.log(result);
             console.log("/////////////");
+            */
         }
     })
 
-    console.log(sql);
+    // console.log(sql);
 
     // res.status(200).render('display_locations.pug', {title: website_name, query: inputdata});
 
