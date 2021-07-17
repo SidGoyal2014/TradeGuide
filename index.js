@@ -83,6 +83,7 @@ app.post("/display_locations", (req,res)=>{
             }
             else{
                 // something different
+
                 var addresses = [];
                 var temp = "";
 
@@ -92,9 +93,26 @@ app.post("/display_locations", (req,res)=>{
                     temp = "";
                 }
 
+                var company_data = [];
+                var temp2 = {};
+
+                for(var i=0;i<result.length;i++){
+                    temp2["name"] = result[i].name;
+                    temp2["email"] = result[i].email;
+                    temp2["phone"] = result[i].ph_number;
+                    temp2["website"] = result[i].website;
+                    temp2["description"] = result[i].description;
+                    temp2["address"] = addresses[i];
+                    company_data.push(temp2);
+                }
+
+                console.log("Company_Data : ");
+                console.log(company_data);
+                console.log("-----------------------");
+
                 // console.log("Addresses before : ");
                 console.log(addresses);
-                res.status(200).render('display_locations.pug', {title: website_name, address: addresses});
+                res.status(200).render('display_locations.pug', {title: website_name, address: addresses, c_data: company_data});
             }
 
             // res.status(200).render('display_locations.pug', {title: website_name, query: inputdata});
@@ -119,7 +137,7 @@ app.post('/register_auth', async(req,res)=>{
 
     console.log("hey there!!");
 
-    // error starting from here.. incmplete
+    // error starting from here. incomplete
     console.log(req.body.name);
 
     inputdata ={

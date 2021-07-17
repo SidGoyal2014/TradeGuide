@@ -133,19 +133,50 @@
         |        // console.log(address);
         |        // console.log("---- AFTER ADDRESSES ------");
         |        // console.log(address[0]);
+        |        // var cdata = !{JSON.stringify(c_data)};
+        |        var cdata = !{JSON.stringify(c_data)};
+        |        console.log(typeof(cdata));
+        |        console.log("CDATA");
+        |        console.log(cdata);
+        |        console.log("---- CDATA ----");
+        |        console.log(cdata[0]);
         |
         |        for(var i=0;i<address.length;i++){
         |           // console.log("ADDRESS");
         |           // console.log(address[i]);
         |           // console.log("ADDRESS");
-        |           $.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q='+address[i], async(data)=>{
-        |               // console.log("-------------------------");
-        |               // console.log(data);
-        |               // console.log("-------------------------");
-        |               // console.log(data[0].lat);
-        |               // console.log(data[0].lon);
-        |               L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
-        |           });
+        |           console.log("outside i : ",i);
+        |           function outer(i){
+        |               $.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q='+address[i], (data)=>{
+        |                   // console.log("-------------------------");
+        |                   // console.log(data);
+        |                   // console.log("-------------------------");
+        |                   // console.log(data[0].lat);
+        |                   // console.log(data[0].lon);
+        |                   // var cdata = !{JSON.stringify(c_data)};
+        |                   console.log("inside i : ", i);
+        |                   console.log(cdata[i]);
+        |                   // console.log(cdata);
+        |                   // console.log(typeof(cdata[i]));
+        |                   // var temp = JSON.parse(cdata[i]);
+        |                   // console.log(temp);
+        |                   // console.log(typeof(temp));
+        |                   var exp = "";
+        |                   exp = "<b>Company Name : </b>" + "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + cdata[i].name + "</font>" + "<br>";
+        |                   // exp = "<b>Company Name : </b>" + "<font>" + cdata[i].name + "</font>" + "<br>";
+        |                   exp = exp + "<b>Email : </b>"+ "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + cdata[i]["email"] + "</font>" + "<br>";
+        |                   exp = exp + "<b>Address : </b>" + "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + cdata[i]["address"] + "</font>" + "<br>";
+        |                   exp = exp + "<b>Phone Number : </b>" + "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + cdata[i]["phone"] + "</font>" + "<br>";
+        |                   exp = exp + "<b>Website : </b>"+  "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + + cdata[i]["website"] + "</font>" + "<br>";
+        |                   exp = exp + "<b>Description : </b>" + "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + cdata[i]["description"] + "</font>" + "<br>";
+        |                   // exp = exp + "Email : " + cdata[i].email + "\n";
+        |                   console.log(exp);
+        |
+        |                   // L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
+        |                   L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup(exp);
+        |               });
+        |           }
+        |           outer(i);
         |           // L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
         |        }
         |        // L.marker([51.5,-0.09,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
