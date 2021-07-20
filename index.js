@@ -73,6 +73,7 @@ app.post("/trader_login", (req,res)=>{
         if(err){
             throw err;
         }
+        
         else{
             if(result == null || result.length <= 0){
                 console.log("The session is NOT set");
