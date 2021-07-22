@@ -6,6 +6,8 @@ const session = require('express-session');
 const mysql = require('mysql');
 const { COPYFILE_FICLONE } = require('constants');
 const port = 3000;
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 // set the name of the website
 var config = fs.readFileSync("./package.json", "utf8", (err,jsonstring)=>{
@@ -18,8 +20,15 @@ const website_name = config.name;
 // Initializing the app
 const app = express();
 
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
+app.use(cookieParser());
 
 var con = mysql.createConnection({
     host : "localhost",
@@ -28,7 +37,7 @@ var con = mysql.createConnection({
     database : "tradeguide"
 });
 
-con.connect(async(err)=>{
+con.connect((err)=>{
     if(err){
         throw err;
     }
@@ -45,6 +54,9 @@ app.use('/static', express.static('static'));
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname,'views'));
 
+// to store the session
+var session1;
+
 // ENDPOINTS
 app.get('/', (req,res)=>{
     res.status(200).render('index.pug', {title:website_name});
@@ -55,7 +67,28 @@ app.get('/register', (req,res)=>{
 });
 
 app.get('/login', (req,res)=>{
-    res.status(200).render('trader_login.pug', {title:website_name});
+    console.log(session1);
+    if(session1 == null){
+        // res.redirect("/trader_login");
+        res.status(200).render('trader_login.pug', {title:website_name});
+    }
+    else{
+        var sql = "SELECT * FROM trader WHERE (uname = " + "'" + session1.username + "')";
+        console.log(sql);
+        con.query(sql, (err,result)=>{
+            if(err){
+                throw err;
+            }
+            else{
+                console.log(result);
+                console.log("--------------");
+                console.log(result[0]);
+                // var x = result[0].stringify;
+                res.status(200).render('trader_dashboard.pug', {title: website_name, data:result[0]});
+            }
+        });
+        // res.status(200).render('trader_dashboard.pug', {title: website_name});
+    }
 });
 
 app.post("/trader_login", (req,res)=>{
@@ -73,16 +106,61 @@ app.post("/trader_login", (req,res)=>{
         if(err){
             throw err;
         }
-        
         else{
             if(result == null || result.length <= 0){
                 console.log("The session is NOT set");
             }
             else{
                 console.log("The session is set");
+                session1 = req.session;
+                session1.username = inputdata.uname;
+                console.log(session1);
+                res.redirect("/login");
+                // res.status(200).render('trader_dashboard.pug', {title: website_name});
             }
         }
     });
+});
+
+app.post("/edit_trader", (req,res)=>{
+    if(session1 == null){
+        res.redirect("/trader_login");
+    }
+    else{
+        var inputdata = {
+            name : req.body.name,
+            email : req.body.email,
+            country : req.body.country,
+            state : req.body.state,
+            city : req.body.city,
+            pincode : req.body.pincode,
+            address : req.body.address,
+            category : req.body.category,
+            ph_number : req.body.ph_number,
+            website : req.body.website,
+            description : req.body.description
+        }
+
+        var sql = "UPDATE trader SET email=" + "'" + inputdata.email + "', name=" + "'" + inputdata.name + "', country=" + "'" + inputdata.country + "', state=" + "'" + inputdata.state + "', city=" + "'" + inputdata.city + "', pincode=" + "'" + inputdata.pincode + "', address=" + "'" + inputdata.address + "',  category=" + "'" + inputdata.category + "', ph_number=" + "'" + inputdata.ph_number + "', website=" + "'" + inputdata.website  + "', description=" + "'" + inputdata.description + "' where uname=" + "'" + session1.username + "'";
+        console.log(sql);
+
+        con.query(sql, (err,result)=>{
+            if(err){
+                throw err;
+            }
+            else{
+                console.log(result);
+                res.redirect("/login");
+            }
+        });
+        console.log(sql);
+    }
+});
+
+app.get('/logout', (req,res)=>{
+    req.session.destroy();
+    session1 = null;
+    res.redirect("/");
 });
 
 app.post("/display_locations", (req,res)=>{
