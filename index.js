@@ -66,6 +66,35 @@ app.get('/register', (req,res)=>{
     res.status(200).render('register.pug', {title:website_name});
 });
 
+app.get('/register_user', (req,res)=>{
+    res.status(200).render('register_user.pug', {title:website_name});
+});
+
+app.post("/register_user", (req,res)=>{
+
+    inputdata = {
+        fn: req.body.firstname,
+        ln: req.body.lastname,
+        email: req.body.email,
+        password: req.body.re_password
+    };
+
+    var name = inputdata.fn + " " + inputdata.ln;
+
+    var sql = "INSERT INTO person(name, email, ph_number, password) VALUES ('" + name + "', '" + inputdata.email + "', '' ,'" + inputdata.password + "')";
+
+    console.log(sql);
+
+    con.query(sql, (err,result)=>{
+        if(err){
+            throw err;
+        }
+        else{
+            console.log(result);
+        }
+    });
+});
+
 app.get('/login', (req,res)=>{
     console.log(session1);
     if(session1 == null){
@@ -116,7 +145,6 @@ app.post("/trader_login", (req,res)=>{
                 session1.username = inputdata.uname;
                 console.log(session1);
                 res.redirect("/login");
-                // res.status(200).render('trader_dashboard.pug', {title: website_name});
             }
         }
     });
@@ -196,20 +224,11 @@ app.post("/display_locations", (req,res)=>{
                 var addresses = [];
                 var temp = "";
 
-                // console.log("Result Length : ",result.length);
-
                 for(var i=0;i<result.length;i++){
                     temp = temp + result[i].address + "," + result[i].city + "," + result[i].state + "," + result[i].pincode + "," + result[i].country;
                     addresses.push(temp);
                     temp = "";
                 }
-
-                /*
-                console.log(addresses);
-                console.log("_____ RESULT__________");
-                console.log(result);
-                console.log("_______________________");
-                */
 
                 var company_data = [];
                 // var temp2 = {};
