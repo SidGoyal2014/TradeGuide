@@ -143,12 +143,131 @@ app.post("/trader_login", (req,res)=>{
                 console.log("The session is set");
                 session1 = req.session;
                 session1.username = inputdata.uname;
+                session1.type = "trader";
                 console.log(session1);
                 res.redirect("/login");
             }
         }
     });
 });
+
+app.get("/user_login", (req,res)=>{
+    console.log(session1);
+    if(session1 == null){
+        res.status(200).render("user_login.pug");
+    }
+    else{
+        // something else later
+    }
+})
+
+app.post("/user_login", (req,res)=>{
+
+    inputdata = {
+        uname : req.body.uname,
+        password : req.body.password
+    }
+
+    console.log("uname : ", inputdata.uname);
+    console.log("password : ", inputdata.password);
+
+    var sql = "SELECT * from person WHERE (email = " + "'" + inputdata.uname + "'" + " AND password = " + "'" + inputdata.password + "'" + ")";
+
+    console.log(sql);
+
+    con.query(sql, (err,result)=>{
+        if(err){
+            throw err;
+        }
+        else{
+            console.log(result);
+            if((result == null) || (result.length <= 0)){
+                req.session.destroy();
+                session1 = null;
+                res.redirect("/user_login");
+            }
+            else{
+                session1 = req.session;
+                session1.uname = inputdata.uname;
+                session1.type = "user";
+                res.redirect("/user_dashboard");
+                // res.status(200).render("user_dashboard.pug");
+            }
+        }
+    })
+})
+
+app.get("/user_dashboard", (req,res)=>{
+    if((session1 == null) || (session1.type != "user")){
+        res.redirect("/user_login");
+    }
+    else{
+        res.status(200).render("user_dashboard.pug", {title: website_name, address: null, c_data: null});
+    }
+})
+
+app.post("/user_dashboard", (req,res)=>{
+
+    inputdata = {
+        country : req.body.country,
+        state : req.body.state,
+        city : req.body.city,
+        category : req.body.category,
+        search : req.body.search
+    }
+
+    console.log("INPUTDATA");
+    console.log(inputdata);
+
+    if((session1 == null) || (session.type != "user")){
+        res.redirect("/user_login");
+    }
+    else{
+
+        var sql = "SELECT * from trader WHERE (country = " + "'" + inputdata.country + "'" + " AND state = " + "'" + inputdata.state + "'" + " AND city = " + "'" + inputdata.city + "'" + " AND category = " + "'" + inputdata.category + "'" + ")"; 
+        con.query(sql, async(err,result)=>{
+            if(err){
+                throw err;
+            }
+            else{
+
+                if(result == null || result.length <=0){
+                    // something different
+                }
+                else{
+                    // console.log("RESULT");
+                    // console.log(result);
+                    // something different
+
+                    var addresses = [];
+                    var temp = "";
+
+                    for(var i=0;i<result.length;i++){
+                        temp = temp + result[i].address + "," + result[i].city + "," + result[i].state + "," + result[i].pincode + "," + result[i].country;
+                        addresses.push(temp);
+                        temp = "";
+                    }
+
+                    var company_data = [];
+                    // var temp2 = {};
+
+                    for(var i=0;i<result.length;i++){
+                        var temp2 = {};
+                        temp2["name"] = result[i].name;
+                        temp2["email"] = result[i].email;
+                        temp2["phone"] = result[i].ph_number;
+                        temp2["website"] = result[i].website;
+                        temp2["description"] = result[i].description;
+                        temp2["address"] = addresses[i];
+                        company_data.push(temp2);
+                    }
+
+                    res.status(200).render('user_dashboard.pug', {title: website_name, address: addresses, c_data: company_data});
+                }
+            }
+        })
+    }
+})
 
 app.post("/edit_trader", (req,res)=>{
     if(session1 == null){
@@ -201,6 +320,7 @@ app.post("/display_locations", (req,res)=>{
         search : req.body.search
     }
 
+    console.log("INPUTDATA");
     console.log(inputdata);
     // console.log(req.body.country);
     // console.log(req.body.state);
@@ -219,6 +339,8 @@ app.post("/display_locations", (req,res)=>{
                 // something different
             }
             else{
+                console.log("RESULT");
+                console.log(result);
                 // something different
 
                 var addresses = [];

@@ -128,7 +128,12 @@
         |            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
         |        });
         |        // console.log(Icon.iconUrl);
-        |        var address = !{JSON.stringify(address)};
+        |        // try{
+        |           var address = !{JSON.stringify(address)};
+        |        // }
+        |        // catch(err){
+        |           console.log("address not there  xyz");
+        |        // }
         |        // console.log("After Addresses");
         |        // console.log(address);
         |        // console.log("---- AFTER ADDRESSES ------");
@@ -180,7 +185,7 @@
         |           outer(i);
         |           // L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
         |        }
-        |        // L.marker([51.5,-0.09,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
+        |        // L.marker([51.5,-0.09,{icon:Icon}]).addTo(mymap).bindPopup("This is the location"); */
         |    </script>
         |</div>
 
