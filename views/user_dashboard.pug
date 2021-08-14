@@ -12,6 +12,12 @@
         | <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+        | <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        | <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
         | <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -77,7 +83,7 @@
             </nav>
         </header>
 
-        <form method="POST" action="/display_locations">
+        <form method="POST" action="/user_dashboard">
             | <!--- <input type="text" name="country" id="country" placeholder="Enter Country" required> --->
             | <!----- <input type="text" name="state" id="state" placeholder="Enter state" required> ---->
             <select name="country" id="country" required></select>
@@ -146,11 +152,12 @@
         |        console.log("---- CDATA ----");
         |        // console.log(cdata[0]);
         |
+        |        if(address != null){
         |        for(var i=0;i<address.length;i++){
         |           // console.log("ADDRESS");
         |           // console.log(address[i]);
         |           // console.log("ADDRESS");
-        |           console.log("outside i : ",i);
+        |           // console.log("outside i : ",i);
         |           function outer(i){
         |               $.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q='+address[i], (data)=>{
         |                   // console.log("-------------- data-----------");
@@ -159,8 +166,8 @@
         |                   // console.log(data[0].lat);
         |                   // console.log(data[0].lon);
         |                   // var cdata = !{JSON.stringify(c_data)};
-        |                   console.log("inside i : ", i);
-        |                   console.log(cdata[i]);
+        |                   // console.log("inside i : ", i);
+        |                   // console.log(cdata[i]);
         |                   // console.log(cdata);
         |                   // console.log(typeof(cdata[i]));
         |                   // var temp = JSON.parse(cdata[i]);
@@ -175,8 +182,37 @@
         |                   exp = exp + "<b>Website : </b>"+  "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + + cdata[i]["website"] + "</font>" + "<br>";
         |                   exp = exp + "<b>Description : </b>" + "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + cdata[i]["description"] + "</font>" + "<br>";
         |                   // exp = exp + "Email : " + cdata[i].email + "\n";
-        |                   console.log("EXP");
-        |                   console.log(exp);
+        |                   exp = exp + "<hr><strong> WANT TO REVIEW </strong><br>"
+        |                   exp = exp + "<form method='POST' action='/trader_rating_customer'>";
+        |                   // exp = exp + "<div>";
+        |                   exp = exp + "<input value='1' type='radio' name='review' id='1'>";
+        |                   exp = exp + "<label>1</label><br>";
+        |                   // exp = exp + "</div>";
+        |
+        |                   // exp = exp + "<div>";
+        |                   exp = exp + "<input value='2' type='radio' name='review' id='2'>";
+        |                   exp = exp + "<label>2</label><br>";
+        |                   // exp = exp + "</div>";
+        |
+        |                   // exp = exp + "<div>";
+        |                   exp = exp + "<input value='3' type='radio' name='review' id='3'>";
+        |                   exp = exp + "<label>3</label><br>";
+        |                   // exp = exp + "</div>";
+        |
+        |                   // exp = exp + "<div>";
+        |                   exp = exp + "<input value='4' type='radio' name='review' id='4'>";
+        |                   exp = exp + "<label>4</label><br>";
+        |                   // exp = exp + "</div>";
+        |
+        |                   // exp = exp + "<div>";
+        |                   exp = exp + "<input value='5' type='radio' name='review' id='5'>";
+        |                   exp = exp + "<label>5</label>";
+        |                   // exp = exp + "</div>";
+        |
+        |                   exp = exp + "<br><button class='' type='submit'>Submit Review</button>";
+        |                   exp = exp + "</form>";
+        |                   // console.log("EXP");
+        |                   // console.log(exp);
         |
         |                   // L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
         |                   L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup(exp);
@@ -185,6 +221,10 @@
         |           outer(i);
         |           // L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
         |        }
+        |        }
+        |        console.log("MYMAP");
+        |        console.log((mymap));
+        |        console.log("===============");
         |        // L.marker([51.5,-0.09,{icon:Icon}]).addTo(mymap).bindPopup("This is the location"); */
         |    </script>
         |</div>

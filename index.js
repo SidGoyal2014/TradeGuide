@@ -216,15 +216,17 @@ app.post("/user_dashboard", (req,res)=>{
         search : req.body.search
     }
 
-    console.log("INPUTDATA");
-    console.log(inputdata);
+    // console.log("INPUTDATA--");
+    // console.log(inputdata);
 
-    if((session1 == null) || (session.type != "user")){
+    if((session1 == null) || (session1.type != "user")){
+        // console.log("NO SESSION IS there");
         res.redirect("/user_login");
     }
     else{
-
-        var sql = "SELECT * from trader WHERE (country = " + "'" + inputdata.country + "'" + " AND state = " + "'" + inputdata.state + "'" + " AND city = " + "'" + inputdata.city + "'" + " AND category = " + "'" + inputdata.category + "'" + ")"; 
+        // console.log("HERE WE ARE IN SESSION");
+        var sql = "SELECT * from trader WHERE (country = " + "'" + inputdata.country + "'" + " AND state = " + "'" + inputdata.state + "'" + " AND city = " + "'" + inputdata.city + "'" + " AND category = " + "'" + inputdata.category + "'" + ")";
+        console.log(sql);
         con.query(sql, async(err,result)=>{
             if(err){
                 throw err;
@@ -266,6 +268,23 @@ app.post("/user_dashboard", (req,res)=>{
                 }
             }
         })
+    }
+})
+
+app.post("/trader_rating_customer", (req,res)=>{
+    if(session1 == null){
+        res.redirect("/user_dashboard");
+    }
+    else if(session1.type != "user"){
+        res.redirect("/")
+    }
+    else{
+
+        inputdata = {
+            review : req.body.review
+        }
+        console.log("REVIEW");
+        console.log(inputdata.review);
     }
 })
 
