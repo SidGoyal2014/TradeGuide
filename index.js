@@ -255,6 +255,7 @@ app.post("/user_dashboard", (req,res)=>{
 
                     for(var i=0;i<result.length;i++){
                         var temp2 = {};
+                        temp2["uname"] = result[i].uname;
                         temp2["name"] = result[i].name;
                         temp2["email"] = result[i].email;
                         temp2["phone"] = result[i].ph_number;
@@ -281,10 +282,29 @@ app.post("/trader_rating_customer", (req,res)=>{
     else{
 
         inputdata = {
-            review : req.body.review
+            review : req.body.review,
+            company_uname : req.body.uname
         }
         console.log("REVIEW");
         console.log(inputdata.review);
+
+        console.log("COMPANY USERNAME");
+        console.log(inputdata.company_uname);
+
+        var sql = "INSERT INTO ratings (person_email,company_uname,rating) VALUES('" + session1.uname + "', '" + inputdata.company_uname + "', '" + inputdata.review + "')";
+        console.log(sql);
+
+        con.query(sql, (err,result)=>{
+            if(err){
+                throw err;
+            }
+            else{
+                console.log(result);
+                console.log("Successful");
+            }
+        })
+
+        res.redirect("/user_dashboard");
     }
 })
 

@@ -182,7 +182,7 @@
         |                   exp = exp + "<b>Website : </b>"+  "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + + cdata[i]["website"] + "</font>" + "<br>";
         |                   exp = exp + "<b>Description : </b>" + "<font style=" + "'" + "font-family: tahoma" + "'" + ">" + cdata[i]["description"] + "</font>" + "<br>";
         |                   // exp = exp + "Email : " + cdata[i].email + "\n";
-        |                   exp = exp + "<hr><strong> WANT TO REVIEW </strong><br>"
+        |                   exp = exp + "<hr><strong><font style='font-family:tahoma'> WANT TO REVIEW </font></strong><br>"
         |                   exp = exp + "<form method='POST' action='/trader_rating_customer'>";
         |                   // exp = exp + "<div>";
         |                   exp = exp + "<input value='1' type='radio' name='review' id='1'>";
@@ -206,13 +206,17 @@
         |
         |                   // exp = exp + "<div>";
         |                   exp = exp + "<input value='5' type='radio' name='review' id='5'>";
-        |                   exp = exp + "<label>5</label>";
+        |                   exp = exp + "<label>5</label><br>";
         |                   // exp = exp + "</div>";
+        |
+        |                   exp = exp + "<label><font style='font-family:tahoma'>Don't modify: </font></label>";
+        |                   exp = exp + "<input type='text' id='uname' name='uname' value='" + cdata[i]["uname"] + "' readonly><br>";
+        |                   exp = exp + "<label></label>";
         |
         |                   exp = exp + "<br><button class='' type='submit'>Submit Review</button>";
         |                   exp = exp + "</form>";
-        |                   // console.log("EXP");
-        |                   // console.log(exp);
+        |                   console.log("EXP");
+        |                   console.log(exp);
         |
         |                   // L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup("This is the location");
         |                   L.marker([data[0].lat,data[0].lon,{icon:Icon}]).addTo(mymap).bindPopup(exp);
